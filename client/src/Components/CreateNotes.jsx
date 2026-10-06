@@ -3,13 +3,11 @@ import { Fab } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { Zoom } from "@mui/material";
 
-
 function CreateNote(props) {
   const [newNote, setNewNote] = useState({
     title: "",
     content: "",
   });
-
 
   function handleChange(event) {
     const { name, value } = event.target;
@@ -19,7 +17,6 @@ function CreateNote(props) {
       return { ...prev, [name]: value };
     });
   }
-
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -44,7 +41,7 @@ function CreateNote(props) {
           title: "",
           content: "",
         });
-        props.onAdd()
+        props.onAdd();
       }
     } catch (err) {
       console.error("Error connecting to the backend:", err);

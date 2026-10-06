@@ -32,12 +32,38 @@ function App() {
     addNote();
   }
 
-  function deleteNode(id) {
-    setNote((prev) => {
-      return prev.filter((noteItem, index) => {
-        return index != id;
+  // function deleteNode(id) {
+  //   setNote((prev) => {
+  //     return prev.filter((noteItem, index) => {
+  //       return index != id;
+  //     });
+  //   });
+  // }
+
+  async function handleDelete(id) {
+    // props.onDelete(props.id);
+    try {
+      const response = await fetch("http://localhost:3001/delete", {
+        method: "Post",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+        }),
       });
-    });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setNote((prev) => {
+          return prev.filter((noteItem) => {
+            return noteItem.id != id;
+          });
+        });
+        // console.log("Item Succesfully deleted");
+      }
+    } catch (err) {
+      console.error("Error: ", err);
+    }
   }
 
   return (
@@ -47,7 +73,7 @@ function App() {
         <CreateNotes onAdd={createNote} />
 
         <div className="allnotes">
-          {notes.map((noteItem, index) => {
+          {notes.map((noteItem) => {
             const date = new Date(noteItem.created_at);
             const formattedDate = date.toLocaleDateString("en-IN", {
               day: "2-digit",
@@ -58,12 +84,12 @@ function App() {
             });
             return (
               <Note
-                key={index}
-                id={index}
+                key={noteItem.id}
+                id={noteItem.id}
                 title={noteItem.title}
                 content={noteItem.content}
                 createdat={formattedDate}
-                onDelete={deleteNode}
+                onDelete={handleDelete}
               />
             );
           })}

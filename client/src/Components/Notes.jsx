@@ -16,7 +16,12 @@ function Notes(props) {
         <p className="created_time">{props.createdat}</p>
       </div>
       <div className="note-edit">
-        <Edit />
+        <Button
+          // onClick={handleClick}
+          variant="outlined"
+          startIcon={<Edit />}
+        ></Button>
+
         <Button
           onClick={handleClick}
           variant="outlined"
