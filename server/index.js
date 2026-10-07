@@ -61,8 +61,22 @@ app.post("/api/notes", async (req, res) => {
   }
 });
 
-app.patch("/api/notes/modify", (req, res) => {
-  
+app.patch("/api/notes/modify", async (req, res) => {
+  const { id, title, content } = req.body;
+
+  try {
+    const updatedNote = await db.query(`UPDATE notes SET title = $2, content= $3 WHERE id = $1`, [
+      id,
+      title,
+      content,
+    ]);
+    res.status(201).json({
+      success: true,
+      // data: updatedNote.rows,
+    });
+  } catch (err) {
+    console.error("Erro:", err);
+  }
 });
 
 app.post("/delete", async (req, res) => {

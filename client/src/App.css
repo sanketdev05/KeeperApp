@@ -138,3 +138,8 @@ form.createnote button {
   cursor: pointer;
   outline: none;
 }
+
+[contenteditable="true"]:focus {
+  outline: none;
+  border: none;
+}

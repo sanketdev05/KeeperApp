@@ -4,6 +4,7 @@ import { Add } from "@mui/icons-material";
 import { Zoom } from "@mui/material";
 
 function CreateNote(props) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const [newNote, setNewNote] = useState({
     title: "",
     content: "",
@@ -16,6 +17,10 @@ function CreateNote(props) {
     setNewNote((prev) => {
       return { ...prev, [name]: value };
     });
+  }
+
+  function handleClick(){
+    setIsExpanded(true)
   }
 
   async function handleSubmit(e) {
@@ -51,29 +56,34 @@ function CreateNote(props) {
   return (
     <div className="form-content">
       <form className="createnote" onSubmit={handleSubmit}>
-        <input
-          className="inputfield"
-          name="title"
-          type="text"
-          value={newNote.title}
-          placeholder="Type title...."
-          onChange={handleChange}
-        />
+        {isExpanded && (
+          <input
+            className="inputfield"
+            name="title"
+            type="text"
+            value={newNote.title}
+            placeholder="Type title...."
+            onChange={handleChange}
+          />
+        )}
         <textarea
           className="inputfield"
           name="content"
           type="text"
           value={newNote.content}
           placeholder="Type something...."
-          rows={3}
+          rows={isExpanded ? 5 : 1}
           onChange={handleChange}
+          onClick={handleClick}
         />
 
-        <Zoom in={true}>
-          <Fab type="submit">
-            <Add />
-          </Fab>
-        </Zoom>
+        {isExpanded && (
+          <Zoom in={true}>
+            <Fab type="submit">
+              <Add />
+            </Fab>
+          </Zoom>
+        )}
       </form>
     </div>
   );

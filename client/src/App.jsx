@@ -8,6 +8,7 @@ import "./App.css";
 
 function App() {
   const [notes, setNote] = useState([]);
+  const [isEditableId, setIsEditableId] = useState(null);
 
   async function addNote() {
     try {
@@ -32,14 +33,6 @@ function App() {
     addNote();
   }
 
-  // function deleteNode(id) {
-  //   setNote((prev) => {
-  //     return prev.filter((noteItem, index) => {
-  //       return index != id;
-  //     });
-  //   });
-  // }
-
   async function handleDelete(id) {
     // props.onDelete(props.id);
     try {
@@ -61,6 +54,51 @@ function App() {
         });
         // console.log("Item Succesfully deleted");
       }
+    } catch (err) {
+      console.error("Error: ", err);
+    }
+  }
+
+  function handleEdit(id) {
+    setIsEditableId(id);
+  }
+
+  function handleCancel() {
+    setIsEditableId(null);
+  }
+
+  async function handleUpdate(id, title, content) {
+    try {
+      console.log("handleUpdate called");
+      console.log("id:", id);
+      console.log("title:", title);
+      console.log("content:", content);
+
+      const response = await fetch("http://localhost:3001/api/notes/modify", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: id,
+          title: title,
+          content: content,
+        }),
+      });
+
+      console.log("response status:", response.status);
+
+      const result = await response.json();
+
+      console.log("backend result:", result);
+
+      if (result.success) {
+        setNote((prev) => {
+          // console.log("prev:", prev);
+          return prev.map((noteItem) => {
+            return noteItem.id === id ? { ...noteItem, title, content } : noteItem;
+          });
+        });
+      }
+      setIsEditableId(null);
     } catch (err) {
       console.error("Error: ", err);
     }
@@ -89,7 +127,11 @@ function App() {
                 title={noteItem.title}
                 content={noteItem.content}
                 createdat={formattedDate}
+                isEditing={isEditableId === noteItem.id}
                 onDelete={handleDelete}
+                onEdit={handleEdit}
+                onCancel={handleCancel}
+                onUpdate={handleUpdate}
               />
             );
           })}
