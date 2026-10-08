@@ -124,6 +124,16 @@ form.createnote textarea {
   font-family: inherit;
   resize: none;
 }
+form.edit_note input,
+form.edit_note textarea {
+  width: 100%;
+  border: none;
+  padding: 8px;
+  outline: none;
+  font-size: 1.2em;
+  font-family: inherit;
+  resize: none;
+}
 form.createnote button {
   position: absolute;
   right: 18px;

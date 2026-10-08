@@ -43,9 +43,8 @@ function Notes(props) {
     <div className="note">
       {props.isEditing ? (
         <div>
-          <form>
+          <form className="edit_note">
             <input
-              className="inputfield"
               name="title"
               type="text"
               value={tempNote.title}
@@ -54,7 +53,6 @@ function Notes(props) {
             />
 
             <textarea
-              className="inputfield"
               name="content"
               type="text"
               value={tempNote.content}

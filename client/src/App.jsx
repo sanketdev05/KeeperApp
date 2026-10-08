@@ -29,12 +29,28 @@ function App() {
     addNote();
   }, []);
 
-  function createNote() {
-    addNote();
+
+  async function handleSubmit(title, content) {
+    try {
+      const response = await fetch("http://localhost:3001/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: title,
+          content: content,
+        }),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        addNote();
+      }
+    } catch (err) {
+      console.error("Error connecting to the backend:", err);
+    }
   }
 
   async function handleDelete(id) {
-    // props.onDelete(props.id);
     try {
       const response = await fetch("http://localhost:3001/delete", {
         method: "Post",
@@ -52,7 +68,6 @@ function App() {
             return noteItem.id != id;
           });
         });
-        // console.log("Item Succesfully deleted");
       }
     } catch (err) {
       console.error("Error: ", err);
@@ -69,11 +84,6 @@ function App() {
 
   async function handleUpdate(id, title, content) {
     try {
-      console.log("handleUpdate called");
-      console.log("id:", id);
-      console.log("title:", title);
-      console.log("content:", content);
-
       const response = await fetch("http://localhost:3001/api/notes/modify", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -83,18 +93,13 @@ function App() {
           content: content,
         }),
       });
-
-      console.log("response status:", response.status);
-
       const result = await response.json();
-
-      console.log("backend result:", result);
-
       if (result.success) {
         setNote((prev) => {
-          // console.log("prev:", prev);
           return prev.map((noteItem) => {
-            return noteItem.id === id ? { ...noteItem, title, content } : noteItem;
+            return noteItem.id === id
+              ? { ...noteItem, title, content }
+              : noteItem;
           });
         });
       }
@@ -108,8 +113,7 @@ function App() {
     <>
       <Header />
       <main>
-        <CreateNotes onAdd={createNote} />
-
+        <CreateNotes onAdd={handleSubmit} />
         <div className="allnotes">
           {notes.map((noteItem) => {
             const date = new Date(noteItem.created_at);

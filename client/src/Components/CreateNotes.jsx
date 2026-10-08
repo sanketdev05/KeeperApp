@@ -19,38 +19,17 @@ function CreateNote(props) {
     });
   }
 
-  function handleClick(){
-    setIsExpanded(true)
+  function handleClick() {
+    setIsExpanded(true);
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:3001/api/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: newNote.title,
-          content: newNote.content,
-        }),
-      });
-
-      const result = await response.json();
-
-      console.log(result);
-
-      if (result.success) {
-        // setSavedNotes(result.data);
-        setNewNote({
-          title: "",
-          content: "",
-        });
-        props.onAdd();
-      }
-    } catch (err) {
-      console.error("Error connecting to the backend:", err);
-    }
+    setNewNote({
+      title: "",
+      content: "",
+    });
+    props.onAdd(newNote.title, newNote.content);
   }
 
   return (
