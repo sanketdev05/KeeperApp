@@ -25,10 +25,10 @@ function Notes(props) {
       content: props.content,
     });
     props.onEdit(props.id);
+
   }
 
   function handleSaveClick() {
-    
     props.onUpdate(props.id, tempNote.title, tempNote.content, );
   }
 
@@ -39,6 +39,8 @@ function Notes(props) {
       props.onDelete(props.id);
     }
   }
+
+  
 
   return (
     <div className="note">
@@ -82,7 +84,7 @@ function Notes(props) {
             <h1>{props.title}</h1>
             <p className="content">{props.content}</p>
             <p className="created_time">Created At: {props.createdat}</p>
-            <p className="created_time">Updated At: {props.updatedat}</p>
+            { props.isEditedNote && <p className="created_time">Updated At: {props.updatedat}</p> }
 
           </div>
           <div className="note-edit">

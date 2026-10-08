@@ -12,7 +12,6 @@ function CreateNote(props) {
 
   function handleChange(event) {
     const { name, value } = event.target;
-    // console.log("handleChange fired", event.target.name, event.target.value);
 
     setNewNote((prev) => {
       return { ...prev, [name]: value };

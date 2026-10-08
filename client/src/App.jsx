@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import Header from "./Components/Header.jsx";
 import Footer from "./Components/Footer.jsx";
 import Note from "./Components/Notes.jsx";
-// import notes from "./allnotes.jsx";
 import CreateNotes from "./Components/CreateNotes.jsx";
 import "./App.css";
 
 function App() {
   const [notes, setNote] = useState([]);
   const [isEditableId, setIsEditableId] = useState(null);
+
 
   async function addNote() {
     try {
@@ -32,6 +32,11 @@ function App() {
 
   async function handleSubmit(title, content) {
     try {
+
+      if(!title.trim() && !content.trim()){
+        alert("Title and Content are empty. Please fill It")
+        return;
+      }
       const response = await fetch("http://localhost:3001/api/notes", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -147,6 +152,7 @@ function App() {
                 onEdit={handleEdit}
                 onCancel={handleCancel}
                 onUpdate={handleUpdate}
+                isEditedNote={noteItem.updated_at}
               />
             );
           })}

@@ -23,8 +23,16 @@ app.get("/", async (req, res) => {
     res.status(500).json({ error: "Database error occurred" });
   }
 });
+
 app.post("/api/notes", async (req, res) => {
   const { title, content } = req.body;
+
+  if (!title?.trim() && !content?.trim()) {
+    return res.status(400).json({
+      success: false,
+      message: "Note cannot be empty",
+    });
+  }
 
   try {
     const note = await db.query(

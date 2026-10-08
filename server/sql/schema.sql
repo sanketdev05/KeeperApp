@@ -6,7 +6,12 @@ CREATE TABLE IF NOT EXISTS notes (
     id SERIAL PRIMARY KEY,
     title TEXT NOT NULL,
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);
+    created_at TIMESTAMP );
 
 -- run this below code if you need to create another column updated_at
 -- ALTER TABLE notes ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+-- UPDATE notes SET updated_at = NULL
+
+-- ALTER TABLE notes
+-- ALTER COLUMN updated_at DROP DEFAULT;
