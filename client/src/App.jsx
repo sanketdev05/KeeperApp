@@ -95,10 +95,11 @@ function App() {
       });
       const result = await response.json();
       if (result.success) {
+        const updatedNote = result.data
         setNote((prev) => {
           return prev.map((noteItem) => {
             return noteItem.id === id
-              ? { ...noteItem, title, content }
+              ? updatedNote
               : noteItem;
           });
         });
@@ -124,6 +125,15 @@ function App() {
               hour: "2-digit",
               minute: "2-digit",
             });
+
+            const updateDate = new Date(noteItem.updated_at);
+            const updatedFormattedDate = updateDate.toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "short",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
             return (
               <Note
                 key={noteItem.id}
@@ -131,6 +141,7 @@ function App() {
                 title={noteItem.title}
                 content={noteItem.content}
                 createdat={formattedDate}
+                updatedat={updatedFormattedDate}
                 isEditing={isEditableId === noteItem.id}
                 onDelete={handleDelete}
                 onEdit={handleEdit}

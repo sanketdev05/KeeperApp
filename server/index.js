@@ -1,38 +1,18 @@
 import express from "express";
 import dotenv from "dotenv";
-import pg from "pg";
 import cors from "cors";
+import db from "./db.js";
 
 const app = express();
-dotenv.config();
 
 app.use(cors());
 app.use(express.json());
 
-const db = new pg.Client({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
-});
-
 db.connect();
-
-db.query(
-  `CREATE TABLE IF NOT EXISTS notes (
-    id SERIAL PRIMARY KEY,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-  ) `,
-)
-  .then(() => console.log("Notes table is ready"))
-  .catch((err) => console.error("Error creating table:", err));
 
 app.get("/", async (req, res) => {
   try {
-    const newnotes = await db.query(`SELECT * FROM notes`);
+    const newnotes = await db.query(`SELECT * FROM notes ORDER BY id DESC;`);
     // console.log(newnotes)
     res.status(201).json({
       success: true,
@@ -65,14 +45,13 @@ app.patch("/api/notes/modify", async (req, res) => {
   const { id, title, content } = req.body;
 
   try {
-    const updatedNote = await db.query(`UPDATE notes SET title = $2, content= $3 WHERE id = $1`, [
-      id,
-      title,
-      content,
-    ]);
+    const updatedNote = await db.query(
+      `UPDATE notes SET title = $2, content = $3, updated_at = CURRENT_TIMESTAMP  WHERE id = $1 RETURNING *`,
+      [id, title, content],
+    );
     res.status(201).json({
       success: true,
-      // data: updatedNote.rows,
+      data: updatedNote.rows[0],
     });
   } catch (err) {
     console.error("Erro:", err);

@@ -28,7 +28,8 @@ function Notes(props) {
   }
 
   function handleSaveClick() {
-    props.onUpdate(props.id, tempNote.title, tempNote.content);
+    
+    props.onUpdate(props.id, tempNote.title, tempNote.content, );
   }
 
   function handleClick() {
@@ -80,7 +81,9 @@ function Notes(props) {
           <div className="note-content">
             <h1>{props.title}</h1>
             <p className="content">{props.content}</p>
-            <p className="created_time">{props.createdat}</p>
+            <p className="created_time">Created At: {props.createdat}</p>
+            <p className="created_time">Updated At: {props.updatedat}</p>
+
           </div>
           <div className="note-edit">
             <Button
